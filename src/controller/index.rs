@@ -1,10 +1,11 @@
 //--------------------------------------------------------------------------
-// actix_web モジュール
+// usr dependencies
 //--------------------------------------------------------------------------
 use actix_web::middleware::Logger;
 use actix_web::{web, get ,App, HttpRequest, HttpResponse, HttpServer, ResponseError,Responder};
 use thiserror::Error;
 use log::{debug, error, info, trace, warn, LevelFilter,SetLoggerError};
+use serde::Deserialize;
 
 //--------------------------------------------------------------------------
 // ResponseError のラッパー宣言。独自のエラー処理に使用
@@ -17,7 +18,7 @@ impl ResponseError for MyError {}
 // index の戻り値に MyError を使うことが出来ます。
 pub async fn execute() -> Result<HttpResponse, MyError> {
     info!("NISHI8888");
-    let response_body = "Hello world!22";
+    let response_body = "西8888";
     Ok(HttpResponse::Ok().body(response_body))
 }
 
