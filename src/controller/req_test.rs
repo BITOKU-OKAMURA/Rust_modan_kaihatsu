@@ -18,8 +18,8 @@ impl ResponseError for MyError {}
 //--------------------------------------------------------------------------
 // 画面遷移別個別対応
 //--------------------------------------------------------------------------
-//web::Form<PostParams>
-//web::Query<GetParams>
+//※POSTの場合 web::Form<構造体名>
+//※GETの場合    web::Query<構造体名>
 #[derive(Serialize, Deserialize)]
 pub struct GetParams {
     username: String,
@@ -32,13 +32,21 @@ pub struct PostParams {
 
 // MyError は actix_web::ResponseError を実装しているので、
 // index の戻り値に MyError を使うことが出来ます。
-pub async fn execute(web::Path(_user_id): web::Path<String>,info_struct: web::Query<GetParams>,post_struct: web::Form<PostParams>) -> Result<HttpResponse, MyError> {
+pub async fn execute(
+    web::Path(_user_id): web::Path<String>,
+    info_struct: web::Query<GetParams>,
+    post_struct: web::Form<PostParams>
+) -> Result<HttpResponse, MyError> {
     info!("user_id is {}", _user_id);
     info!("user_name is {}", info_struct.username);
     info!("◇ passwd is {}", post_struct.passwd);
-    let response_body = "Hello world!req_test";
+    let response_body = "Hello world!req_test\n";
+    // Ok(HttpResponse::InternalServerError().finish()) //能動的なエラー返却 500
+    //Ok(HttpResponse::Unauthorized().finish())//能動的なエラー返却 401
     Ok(HttpResponse::Ok().body(response_body))
 }
+
+
 
 
 

@@ -1,4 +1,12 @@
-use log::{debug, error, info, trace, warn, LevelFilter,SetLoggerError};
+use log::{
+//  debug, 
+//  error, 
+//  info, 
+//  trace, 
+//  warn, 
+    LevelFilter,
+//  SetLoggerError,
+};
 use log4rs::{
     append::{
         console::{ConsoleAppender, Target},

@@ -1,11 +1,17 @@
 //--------------------------------------------------------------------------
 // usr dependencies
 //--------------------------------------------------------------------------
-use actix_web::middleware::Logger;
-use actix_web::{web, get ,App, HttpRequest, HttpResponse, HttpServer, ResponseError,Responder};
+use actix_web::{HttpResponse, ResponseError};
 use thiserror::Error;
-use log::{debug, error, info, trace, warn, LevelFilter,SetLoggerError};
-use serde::Deserialize;
+use log::{
+//    debug, 
+//    error, 
+    info, 
+//    trace, 
+//    warn, 
+//    LevelFilter,
+//    SetLoggerError
+};
 
 //--------------------------------------------------------------------------
 // ResponseError のラッパー宣言。独自のエラー処理に使用

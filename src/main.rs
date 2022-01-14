@@ -23,6 +23,8 @@ use actix_web::middleware::Logger;
 mod resorce_module;//ログとかDBとかのモジュール
 mod controller;//コントローラ
 
+//curl -XPOST -d 'passwd=abcdefg12345678' http://192.168.186.13:8080/input_param/?username=aaa
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     resorce_module::logs::log4rs_init("actix_web=info","/tmp/foo.log");
@@ -30,6 +32,7 @@ async fn main() -> std::io::Result<()> {
         .route("/", web::get().to(controller::index::execute))
         //.route("/req_test/{_user_id}", web::get().to(controller::req_test::execute))
         .route("/req_test/{_user_id}", web::post().to(controller::req_test::execute))
+        .route("/input_param/", web::post().to(controller::input_param::execute))
     )
         .bind("0.0.0.0:8080")?
         .run()
