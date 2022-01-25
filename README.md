@@ -36,7 +36,7 @@ interfaceを使わないでネスト連結？よくわかりませんが、そ�
 ルート分岐後の処理のハンドリングは分岐先で完結する感じで  
 main関数の制御でスレッド化させてmain関数でひたすらリクエストを待ち受けている状態となっています。  
 
-#[actix_web::main]
+
 async fn main() -> std::io::Result<()> {
     resorce_module::logs::log4rs_init("actix_web=info","/tmp/foo.log");
     HttpServer::new(move || App::new().wrap(Logger::default())
