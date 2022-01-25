@@ -14,21 +14,6 @@ main関数からmodで呼び出すようにしました。それ以外の外部�
 resorce_module というフォルダを作成して同様にmodで呼び出すようにしております。  
 
 
-//--------------------------------------------------------------------------
-// ResponseError のラッパー宣言。独自のエラー処理に使用
-//--------------------------------------------------------------------------
-#[derive(Error, Debug)]
-enum MyError {}
-impl ResponseError for MyError {}
-*/
-use actix_web::{web, App,  HttpServer};
-use actix_web::middleware::Logger;
-
-//--------------------------------------------------------------------------
-// 外部モジュールの読み込み ※クレートにする必要が薄いのでソースで管理
-//--------------------------------------------------------------------------
-mod resorce_module;//ログとかDBとかのモジュール
-mod controller;//コントローラ
 
 # ３．ルーティング
 interfaceを使わないでネスト連結？よくわかりませんが、そういうのを使って  
@@ -37,19 +22,6 @@ interfaceを使わないでネスト連結？よくわかりませんが、そ�
 main関数の制御でスレッド化させてmain関数でひたすらリクエストを待ち受けている状態となっています。  
 
 
-async fn main() -> std::io::Result<()> {
-    resorce_module::logs::log4rs_init("actix_web=info","/tmp/foo.log");
-    HttpServer::new(move || App::new().wrap(Logger::default())
-        .route("/", web::get().to(controller::index::execute))
-        //.route("/req_test/{_user_id}", web::get().to(controller::req_test::execute))
-        .route("/req_test/{_user_id}", web::post().to(controller::req_test::execute))
-        .route("/input_param/", web::post().to(controller::input_param::execute))
-    )
-        .bind("0.0.0.0:8080")?
-        .run()
-        .await?;
-    Ok(())
-}
 
 # ４．入力チェック
 ①入力されたフォームハンドラを厳格にチェックするのが私の流儀です。  
@@ -62,25 +34,6 @@ async fn main() -> std::io::Result<()> {
 トレイトのメンバをその外部から参照するにはpublicにしないと出来ません。
 トレイト自身とそのメンバの権限が分かれており、メンバ毎に独立して管理する事となります。
 
-impl InputParametars {
-    //---------------------------------------------------------------------------------
-    // トレイト内関数:set_input_parametars
-    // ***** 構造体InputParametars として値を代入する。引数項目以外は演算して代入を実施 ******
-    // * 目的:フォームハンドラーの値を精査し、サーバエラーで無くヴァリテーションバックとして返却*
-    // * 境界値チェックや不正アクセスの精査を体系的に実施                                                          *
-    // ***************************************************************************
-    //--------------------------------------------------------------------------------- 
-    pub fn set_input_parametars (
-        //----- 引数一覧 -----//
-        args: String,                  //ハンドラ文字列(ハンドラ名はハッシュの添え字で判別)
-        string_type_in: bool,   //文字列で扱うなら true それ以外なら false
-        mut message_in: String,    //ヴァリテーションバック時のメッセージ文字列
-        min_in:i32,                  //最小値、文字列の場合は文字列数 -1で無視 ※ディフォルト不可
-        max_in:i32,                 //最大値、文字列の場合は文字列数 -1で無視 ※ディフォルト不可
-        check_regix_in:String,
-        //----- 戻り値 -----//
-        ) -> InputParametars { //戻り値の型は構造体InputParametars
-}
 
 ③入力されたフォームは型固定されております。一見モダンでセキュアに見えますが、型を破った入力がされた場合  
 actix_webでリクエストエラーとしてハンドリングされてしまいます。  
